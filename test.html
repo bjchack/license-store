@@ -82,15 +82,15 @@
   <script>
     let validKeys = [];
 
-    // Load license keys from GitHub raw URL
     async function loadKeys() {
       try {
-        const response = await fetch('https://raw.githubusercontent.com/bjchack/license-store/main/license.json');
+        // Use your GitHub Pages raw JSON URL (not raw.githubusercontent)
+        const response = await fetch('https://bjchack.github.io/license-store/license.json');
         if (!response.ok) throw new Error('Network response was not ok');
         validKeys = await response.json();
-
-        // Make sure all keys are uppercase (sanity)
         validKeys = validKeys.map(k => k.trim().toUpperCase());
+
+        console.log("Loaded keys:", validKeys);
       } catch (err) {
         document.getElementById('message').textContent = "❌ Failed to fetch license file.";
         console.error(err);
@@ -124,7 +124,7 @@
 
     function openline() {
       alert("Access Granted! You can now use Openline.");
-      // Here, you can redirect or enable your actual openline app.
+      // Dito mo ilagay yung redirect or unlock functionality mo
     }
   </script>
 
