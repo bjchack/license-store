@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Admin License Generator</title>
+  <meta charset="UTF-8" />
+  <style>
+    body { font-family: sans-serif; padding: 20px; background: #f3f3f3; text-align: center; }
+    input, button { padding: 10px; margin: 5px; width: 90%; max-width: 400px; font-size: 16px; }
+  </style>
+</head>
+<body>
+  <h2>Admin License Key Generator</h2>
+  <input id="githubUser" placeholder="GitHub Username" />
+  <input id="repo" placeholder="Repository Name" />
+  <input id="path" placeholder="File Path (e.g. license.json)" value="license.json" />
+  <input id="token" placeholder="GitHub Token" />
+  <button onclick="generate()">Generate & Save</button>
+  <div id="result"></div>
+
+  <script>
+    function generate() {
+      const username = document.getElementById("githubUser").value.trim();
+      const repo = document.getElementById("repo").value.trim();
+      const path = document.getElementById("path").value.trim();
+      const token = document.getElementById("token").value.trim();
+
+      if (!username || !repo || !path || !token) {
+        alert("Please fill all fields.");
+        return;
+      }
+
+      const newKey = "KEY-" + Math.random().toString(36).substr(2, 8).toUpperCase();
+
+      const url = `https://api.github.com/repos/${username}/${repo}/contents/${path}`;
+
+      fetch(url, {
+        headers: { Authorization: `Bearer ${token}` }
+      })
+      .then(res => res.json())
+      .then(data => {
+        let content = [];
+        if (data.content) {
+          content = JSON.parse(atob(data.content));
+        }
+        content.push(newKey);
+
+        const updatedContent = btoa(JSON.stringify(content, null, 2));
+
+        return fetch(url, {
+          method: "PUT",
+          headers: {
+            "Authorization": `Bearer ${token}`,
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            message: "Add new license key",
+            content: updatedContent,
+            sha: data.sha
+          })
+        });
+      })
+      .then(response => response.json())
+      .then(result => {
+        document.getElementById("result").textContent = "✅ Key saved: " + newKey;
+      })
+      .catch(err => {
+        console.error(err);
+        document.getElementById("result").textContent = "❌ Failed: " + err.message;
+      });
+    }
+  </script>
+</body>
+</html>
