@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Openline License Checker</title>
+  <title>Offline License Checker</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
     body {
@@ -80,24 +80,11 @@
   <button id="mainButton" onclick="openline()">OPENLINE NOW</button>
 
   <script>
-    let validKeys = [];
-
-    // Load license keys from GitHub raw URL
-    async function loadKeys() {
-      try {
-        const response = await fetch('https://raw.githubusercontent.com/bjchack/license-store/main/license.json');
-        if (!response.ok) throw new Error('Network response was not ok');
-        validKeys = await response.json();
-
-        // Make sure all keys are uppercase
-        validKeys = validKeys.map(k => k.trim().toUpperCase());
-      } catch (err) {
-        document.getElementById('message').textContent = "❌ Failed to fetch license file.";
-        console.error(err);
-      }
-    }
-
-    loadKeys();
+    const validKeys = [
+      "KEY-1234-ABCD-5678",
+      "KEY-WXYZ-9999-TEST",
+      "KEY-WGB37P1G"
+    ];
 
     function checkLicense() {
       const input = document.getElementById('licenseInput');
@@ -124,7 +111,7 @@
 
     function openline() {
       alert("Access Granted! You can now use Openline.");
-      // Optionally redirect to your main app page here
+      // Pwede mo palitan ito ng redirect o enable feature
     }
   </script>
 
