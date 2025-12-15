@@ -1,23 +1,11 @@
 (function(){
+    const p = ["c2Vj","cmV0","MTIz"]; // sec + ret + 123
 
-    // LIST OF ALLOWED PASSWORDS
-    const list = [
-        "c2VjcmV0MTIz", // secret123
-        "YmpjMjAyNQ==", // bjc2025
-        "bW92aWVhcHA="  // movieapp
-    ];
-
-    function decode(v){
-        return atob(v);
+    function build(){
+        return atob(p[0]) + atob(p[1]) + atob(p[2]);
     }
 
     window.checkPassword = function(input){
-        for(let i=0;i<list.length;i++){
-            if(input === decode(list[i])){
-                return true;
-            }
-        }
-        return false;
+        return input === build();
     };
-
 })();
